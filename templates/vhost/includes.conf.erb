@@ -1,0 +1,8 @@
+
+# include config <%= @name %>
+
+<% if @confincludes.size != 0 then -%>
+	<%- @confincludes.to_a.each do |sinc| -%>
+	include <%= sinc %>
+	<%- end -%>
+<% end %>

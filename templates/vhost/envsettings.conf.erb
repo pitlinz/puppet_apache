@@ -1,0 +1,8 @@
+
+# envsettings config <%= @name %>
+
+<% if @envsettings.size != 0 then -%>
+	<%- @envsettings.to_a.each do |senv| -%>
+	SetEnv <%= senv %>
+	<%- end -%>
+<% end %>

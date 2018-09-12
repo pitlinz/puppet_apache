@@ -1,0 +1,6 @@
+
+	ErrorLog ${APACHE_LOG_DIR}/<%= logname %>error.log
+	SetEnvIf X-Forwarded-For "^.*\..*\..*\..*" forwarded
+	CustomLog ${APACHE_LOG_DIR}/<%= logname %>access.log combined env=!forwarded
+	CustomLog ${APACHE_LOG_DIR}/<%= logname %>access.log proxy env=forwarded
+

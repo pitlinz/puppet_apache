@@ -1,0 +1,17 @@
+
+	# directory config <%= @name %>
+
+	<Directory "<%= @path %>">
+		Options <%= @options %>
+		AllowOverride <%= @override %>
+<%- if @minorver == 2 then -%>
+		Order allow,deny
+	    Allow from all
+<%- else -%>
+		Require all granted
+<%- end %>
+	</Directory>
+	
+<%- if @diralias != '' then %>	
+	Alias <%= @diralias %> <%= @path %>
+<% end -%>

@@ -1,0 +1,32 @@
+# ************************************
+# Vhost template in module 
+# pitlinz_apache
+# Managed by Puppet
+# ************************************
+
+<VirtualHost *:<%= @_port %>>
+	# The ServerName directive sets the request scheme, hostname and port that
+	# the server uses to identify itself. This is used when creating
+	# redirection URLs. In the context of virtual hosts, the ServerName
+	# specifies what hostname must appear in the request's Host: header to
+	# match this virtual host. 
+	ServerName <%= @servername %>
+<% if @aliases.size != 0 then -%>
+	<%- @aliases.to_a.each do |salias| -%>
+	ServerAlias <%= salias %>
+	<%- end -%>
+<% end %>  
+
+	ServerAdmin <%= @_serveradmin %>
+		
+<%- if @docroot != '' then %>	
+	DocumentRoot <%= @docroot %>
+<%- end -%>
+<%- if @directoryindex != '' then %>
+	DirectoryIndex <%= @directoryindex %>
+<%- end -%>
+        
+<%- if @logname != '' then %>        
+	ErrorLog ${APACHE_LOG_DIR}/<%= @logname %>error.log
+	CustomLog ${APACHE_LOG_DIR}/<%= @logname %>access.log combined
+<% end %>	
