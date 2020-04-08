@@ -1,27 +1,61 @@
 # install letsencrypt
 #
+# @see https://certbot.eff.org/
 # @see https://serverfault.com/questions/768509/lets-encrypt-with-an-nginx-reverse-proxy
 #
 class pitlinz_apache::letsencrypt (
-
+  $cronensure = present
 )  {
-  if !defined(Pitlinz_common::Ppa['python-certbot-apache']) {
-    pitlinz_common::ppa{'python-certbot-apache':
-      ppaname => 'certbot/certbot'
+
+  case $::operatingsystem {
+    'Ubuntu': {
+        case $::lsbdistrelease {
+          '14.04': {
+              pitlinz_apache::letsencrypt::download{'/usr/bin/certbot':
+              }
+            }
+          '16.04': {
+              pitlinz_servicestools::ppa{'python-certbot-apache':
+                ppaname => 'certbot/certbot'
+              }
+            }
+          default: {
+            package{'certbot':
+              ensure => latest
+            }
+          }
+        }
+      }
+    default: {
+        notify{"${::operatingsystem} not defined":
+      }
     }
   }
 
-  if !defined(Package['certbot']) {
-    package{'certbot':
-      ensure => latest,
-      require => Pitlinz_common::Ppa['python-certbot-apache']
-    }
+  file {'/etc/cron.d/certbot':
+    ensure => $cronensure,
+    content => template('pitlinz_apache/cron/certbot.erb')
   }
 
-  if !defined(Package['python-certbot-apache']) {
-    package{'python-certbot-apache':
-      ensure => latest,
-      require => Package['certbot']
-    }
+}
+
+define pitlinz_apache::letsencrypt::download(
+  $url = "https://dl.eff.org/certbot-auto"
+) {
+  exec{'wget certbot-auto':
+    command => "/usr/bin/wget $url",
+    cwd     => "/usr/local/bin/",
+    creates => "/usr/local/bin/certbot-auto"
   }
+
+  file{'/usr/local/bin/certbot-auto':
+    mode => '555',
+    require => Exec['wget certbot-auto']
+  }
+
+  file{$name:
+    ensure => link,
+    target => '/usr/local/bin/certbot-auto'
+  }
+
 }

@@ -1,6 +1,9 @@
 define pitlinz_apache::letsencrypt::vhostssl(
   $servername 	   = $::fqdn,
+<<<<<<< HEAD
   $aliases         = '',
+=======
+>>>>>>> 6dd6b5d807a8301e9c32b8764c2c70be7d916067
   $serveradmin 	   = "webmaster@${::fqdn}",
   $docroot		     = "/srv/www/${::fqdn}",
   $directoryindex	 = "index.php index.html",
@@ -21,9 +24,14 @@ define pitlinz_apache::letsencrypt::vhostssl(
     ensure => present
   }
 
+<<<<<<< HEAD
 
   exec{"certbot $servername":
     command => "/usr/bin/certbot certonly --webroot -w $docroot -d $servername",
+=======
+  exec{"certbot $servername":
+    command => "/usr/bin/certbot certonly --webroot -w $docroot -d $servername"
+>>>>>>> 6dd6b5d807a8301e9c32b8764c2c70be7d916067
     creates => "/etc/letsencrypt/live/$servername"
   }
 
