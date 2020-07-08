@@ -83,10 +83,10 @@ define pitlinz_apache::vhost(
 	}
 
 
-  concat::fragment{"${name}_colse":
+  concat::fragment{"${name}_close":
     target 	=> "${name}",
 		content => "\n</VirtualHost>\n",
-		order	=> "99",
+		order	=> 90
 	}
 
 	file {"/etc/apache2/sites-enabled/${prio}-${name}.conf":
