@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+    ServerName <%= @servername %>
+<% if @rediraliases.size != 0 then -%>
+	<%- @rediraliases.to_a.each do |salias| -%>
+    ServerAlias <%= salias %>
+	<%- end -%>
+<% end %>
+    Redirect permanent / https://<%= @servername %>/
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</VirtualHost>
